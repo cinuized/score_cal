@@ -1,40 +1,57 @@
 import random
+import sys
 
 
 class Score:
-  max_score = 0
-  min_score = 0
+  max_score = 98
+  min_score = 90
   n = 1
   average = 0
+  numarr = [0]
 
-  def __init__(self, max_score, min_score, n, average):
-    self.max_score = max_score
-    self.min_score = min_score
-    self.n = n
-    self.average = average
+  def __init__(self):
+    
+    self.n = int(sys.argv[1])
+    self.average = int(sys.argv[2])
 
   def prepare_numbers(self):
-    numarr = [random.randint(60, 98)]
-    print(numarr)
+    self.numarr = [random.randint(self.min_score, self.max_score)]
+    # print(self.numarr)
     for numbers in range(0, self.n - 1):
-      numarr = numarr + [random.randint(60, 98)]
+      self.numarr = self.numarr + [random.randint(self.min_score, self.max_score)]
     
-    print(numarr)
-    return numarr
+    # print(self.numarr)
+    return self.numarr
 
-  def generate(self):
+  def generate_once(self):
     #TODO: generate scores.
-    numarr = self.prepare_numbers()
-    print(sum(numarr) / len(numarr))
-    print(numarr)
-    print("Generated!")
-
+    # self.numarr = self.prepare_numbers()
+    # average = sum(self.numarr) / len(self.numarr)
+    # print("%d" % int(average))
+    # print(self.numarr)
+    # print("Generated!")
+    self.prepare_numbers()
+    while (1):
+      if (int(sum(self.numarr)/len(self.numarr)) == self.average):
+        self.save_to_file()
+        return self.numarr
+      else:
+        self.prepare_numbers()
+        continue
+      
+  def save_to_file(self):
+    f = open('score.txt', 'a')
+    f.writelines(str(self.numarr)[1:-1] + "\n")
+    f.close()
 
 
 def main():
-  score = Score(60, 98, 7, 87)
-  score.prepare_numbers()
-  score.generate()
+  score = Score()
+  # print(score.average)
+  # print(score.generate_once())
+  # print(sum(score.numarr) / len(score.numarr))
+  for n in range(0, int(sys.argv[3])):
+    print(score.generate_once())
 
 if __name__ == '__main__':
   main()
